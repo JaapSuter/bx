@@ -522,7 +522,7 @@ function toolchain(_buildDir, _libDir)
 		defines {
 			"WIN32",
 			"_WIN32",
-			"_HAS_EXCEPTIONS=0",
+			-- "_HAS_EXCEPTIONS=0",
 			"_HAS_ITERATOR_DEBUGGING=0",
 			"_SCL_SECURE=0",
 			"_SECURE_SCL=0",
@@ -530,9 +530,17 @@ function toolchain(_buildDir, _libDir)
 			"_CRT_SECURE_NO_WARNINGS",
 			"_CRT_SECURE_NO_DEPRECATE",
 		}
+        
+        if _OPTIONS["with-exceptions"] then
+	        defines { "_HAS_EXCEPTIONS=1", }
+        else
+            defines { "_HAS_EXCEPTIONS=0", }
+        end
+
 		buildoptions {
 			"/wd4201", -- warning C4201: nonstandard extension used: nameless struct/union
 			"/wd4324", -- warning C4324: '': structure was padded due to alignment specifier
+                        "/wd4291", -- warning C4291: 'void *...::operator new(size_t,void *)': no matching operator delete found; memory will not be freed if initialization throws an exception
 			"/Ob2",    -- The Inline Function Expansion
 		}
 		linkoptions {
